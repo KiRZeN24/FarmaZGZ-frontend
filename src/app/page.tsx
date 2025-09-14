@@ -17,13 +17,13 @@ export default function Home() {
           {/* Placeholder para la lista de farmacias */}
           <div className="space-y-3">
             <div className="p-4 border-l-4 border-blue-500 bg-blue-50">
-              <h3 className="font-medium">Farmacia Central</h3>
+              <h3 className="font-medium text-black">Farmacia Central</h3>
               <p className="text-sm text-gray-600">Calle Mayor, 123</p>
               <p className="text-sm text-gray-500">Abierta 24h</p>
             </div>
 
             <div className="p-4 border-l-4 border-green-500 bg-green-50">
-              <h3 className="font-medium">Farmacia San Pablo</h3>
+              <h3 className="font-medium text-black">Farmacia San Pablo</h3>
               <p className="text-sm text-gray-600">
                 Avenida César Augusto, 456
               </p>
