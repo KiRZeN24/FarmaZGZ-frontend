@@ -18,12 +18,12 @@ export default function PharmacyList({ pharmacies }: PharmacyListProps) {
       {pharmacies.map((pharmacy) => (
         <div
           key={pharmacy.id}
-          className="p-4 border-l-4 border-blue-500 bg-blue-50 rounded-r-lg"
+          className="p-4 border-l-4 border-green-500 bg-white/80 backdrop-blur-sm rounded-r-lg shadow-sm hover:shadow-md transition-shadow"
         >
-          <h3 className="font-medium text-black">{pharmacy.name}</h3>
-          <p className="text-sm text-gray-600">{pharmacy.address}</p>
-          <p className="text-sm text-gray-500">{pharmacy.hours}</p>
-          <p className="text-sm text-gray-400">📞 {pharmacy.phone}</p>
+          <h3 className="font-medium text-green-800">{pharmacy.name}</h3>
+          <p className="text-sm text-gray-700">{pharmacy.address}</p>
+          <p className="text-sm text-blue-600">{pharmacy.hours}</p>
+          <p className="text-sm text-gray-600">📞 {pharmacy.phone}</p>
         </div>
       ))}
     </div>
