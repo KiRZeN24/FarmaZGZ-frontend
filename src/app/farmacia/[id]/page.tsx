@@ -1,16 +1,33 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPharmacyById } from "@/lib/pharmacy-api";
+import { Pharmacy } from "@/types";
 
 interface PharmacyDetailProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ data?: string }>;
 }
 
-export default async function PharmacyDetail({ params }: PharmacyDetailProps) {
+export default async function PharmacyDetail({
+  params,
+  searchParams,
+}: PharmacyDetailProps) {
   const { id } = await params;
-  const pharmacy = await getPharmacyById(id);
+  const { data } = await searchParams;
 
-  if (!pharmacy) {
+  if (!data) {
+    notFound();
+  }
+
+  let pharmacy: Pharmacy;
+
+  try {
+    pharmacy = JSON.parse(decodeURIComponent(data));
+  } catch (error) {
+    console.error("Error parsing pharmacy data:", error);
+    notFound();
+  }
+
+  if (pharmacy.id !== id) {
     notFound();
   }
 
@@ -74,6 +91,19 @@ export default async function PharmacyDetail({ params }: PharmacyDetailProps) {
             <p>Mapa próximamente</p>
             <p className="text-sm">{pharmacy.address}</p>
           </div>
+        </div>
+
+        <div className="flex gap-2 mt-4 flex-wrap">
+          <a
+            href={`https://www.google.com/maps/search/${encodeURIComponent(
+              pharmacy.address
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn farma-btn-primary"
+          >
+            🧭 Ver en Google Maps
+          </a>
         </div>
       </div>
 

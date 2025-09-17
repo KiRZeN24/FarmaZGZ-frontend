@@ -16,18 +16,22 @@ export default function PharmacyList({ pharmacies }: PharmacyListProps) {
 
   return (
     <div className="space-y-3">
-      {pharmacies.map((pharmacy) => (
-        <Link
-          href={`/farmacia/${pharmacy.id}`}
-          key={pharmacy.id}
-          className="block farma-card hover:shadow-lg transition-shadow cursor-pointer"
-        >
-          <h3 className="font-medium text-green-800">{pharmacy.name}</h3>
-          <p className="text-sm text-gray-700">{pharmacy.address}</p>
-          <p className="text-sm text-blue-600">{pharmacy.hours}</p>
-          <p className="text-sm text-gray-600">📞 {pharmacy.phone}</p>
-        </Link>
-      ))}
+      {pharmacies.map((pharmacy) => {
+        const queryData = encodeURIComponent(JSON.stringify(pharmacy));
+
+        return (
+          <Link
+            href={`/farmacia/${pharmacy.id}?data=${queryData}`}
+            key={pharmacy.id}
+            className="block farma-card hover:shadow-lg transition-shadow cursor-pointer"
+          >
+            <h3 className="font-medium text-green-800">{pharmacy.name}</h3>
+            <p className="text-sm text-gray-700">{pharmacy.address}</p>
+            <p className="text-sm text-blue-600">{pharmacy.hours}</p>
+            <p className="text-sm text-gray-600">📞 {pharmacy.phone}</p>
+          </Link>
+        );
+      })}
     </div>
   );
 }
