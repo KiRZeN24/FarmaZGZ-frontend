@@ -1,2 +1,39 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+:root {
+  --farma-primary: #16a34a;
+  --farma-secondary: #2563eb;
+  --farma-bg-light: #f0fdf4;
+  --farma-bg-medium: #dcfce7;
+  --farma-text-dark: #166534;
+  --farma-text-medium: #15803d;
+}
+
+.farma-navbar {
+  @apply bg-green-50 shadow-md border-b border-green-200;
+}
+
+.farma-btn-primary {
+  @apply btn rounded-full bg-green-600 hover:bg-green-700 text-white border-none px-4 py-2;
+}
+
+.farma-btn-ghost {
+  @apply btn btn-ghost text-green-700 hover:bg-green-100 normal-case;
+}
+
+.farma-logo {
+  @apply btn btn-ghost text-xl text-green-800 hover:bg-green-100;
+}
+
+.farma-bg-gradient {
+  @apply bg-gradient-to-br from-green-50 via-blue-50 to-green-100 min-h-screen;
+}
+
+.farma-card {
+  @apply bg-white/80 border-l-4 border-green-500 rounded-r-lg shadow-sm hover:shadow-md p-4;
+}
+
+.farma-dropdown-item {
+  @apply hover:bg-green-50;
+}
