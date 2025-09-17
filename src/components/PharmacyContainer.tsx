@@ -1,35 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Pharmacy } from "@/types";
+import { usePharmacy } from "@/contexts/PharmacyContext";
 import PharmacyList from "./PharmacyList";
 import LoadingSpinner from "./LoadingSpinner";
 import ErrorMessage from "./ErrorMessage";
 
 export default function PharmacyContainer() {
-  const [pharmacies, setPharmacies] = useState<Pharmacy[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchPharmacies = async () => {
-      try {
-        const response = await fetch(
-          "https://farmazgz.onrender.com/api/pharmacies"
-        );
-        if (!response.ok) {
-          throw new Error("Error al cargar farmacias");
-        }
-        const data = await response.json();
-        setPharmacies(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Error desconocido");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPharmacies();
-  }, []);
+  const { pharmacies, loading, error } = usePharmacy();
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage error={error} />;

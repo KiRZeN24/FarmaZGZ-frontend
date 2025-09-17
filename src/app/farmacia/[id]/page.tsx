@@ -1,33 +1,29 @@
+"use client";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Pharmacy } from "@/types";
+import { usePharmacy } from "@/contexts/PharmacyContext";
+import { use } from "react";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface PharmacyDetailProps {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ data?: string }>;
 }
 
-export default async function PharmacyDetail({
-  params,
-  searchParams,
-}: PharmacyDetailProps) {
-  const { id } = await params;
-  const { data } = await searchParams;
+export default function PharmacyDetail({ params }: PharmacyDetailProps) {
+  const { id } = use(params);
+  const { getPharmacyById, loading } = usePharmacy();
 
-  if (!data) {
-    notFound();
+  if (loading) {
+    return (
+      <div className="container mx-auto p-4 text-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
-  let pharmacy: Pharmacy;
+  const pharmacy = getPharmacyById(id);
 
-  try {
-    pharmacy = JSON.parse(decodeURIComponent(data));
-  } catch (error) {
-    console.error("Error parsing pharmacy data:", error);
-    notFound();
-  }
-
-  if (pharmacy.id !== id) {
+  if (!pharmacy) {
     notFound();
   }
 
