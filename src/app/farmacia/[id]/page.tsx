@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { usePharmacy } from "@/contexts/PharmacyContext";
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { Pharmacy } from "@/types";
 
 interface PharmacyDetailProps {
   params: Promise<{ id: string }>;
@@ -11,7 +11,35 @@ interface PharmacyDetailProps {
 
 export default function PharmacyDetail({ params }: PharmacyDetailProps) {
   const { id } = use(params);
-  const { getPharmacyById, loading } = usePharmacy();
+  const [pharmacy, setPharmacy] = useState<Pharmacy | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPharmacy = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `https://farmazgz.onrender.com/api/pharmacies/${id}`
+        );
+
+        if (!response.ok) {
+          setPharmacy(null);
+          setLoading(false);
+          return;
+        }
+
+        const data = await response.json();
+        setPharmacy(data);
+      } catch (error) {
+        console.error("Error fetching pharmacy:", error);
+        setPharmacy(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPharmacy();
+  }, [id]);
 
   if (loading) {
     return (
@@ -20,8 +48,6 @@ export default function PharmacyDetail({ params }: PharmacyDetailProps) {
       </div>
     );
   }
-
-  const pharmacy = getPharmacyById(id);
 
   if (!pharmacy) {
     notFound();
@@ -36,7 +62,6 @@ export default function PharmacyDetail({ params }: PharmacyDetailProps) {
               Inicio
             </Link>
           </li>
-          <li>Farmacia de Guardia</li>
           <li>{pharmacy.name}</li>
         </ul>
       </div>

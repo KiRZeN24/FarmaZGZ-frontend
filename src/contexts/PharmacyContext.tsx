@@ -12,7 +12,6 @@ interface PharmacyContextType {
   pharmacies: Pharmacy[];
   loading: boolean;
   error: string | null;
-  getPharmacyById: (id: string) => Pharmacy | undefined;
   refetch: () => Promise<void>;
 }
 
@@ -33,7 +32,7 @@ export function PharmacyProvider({ children }: PharmacyProviderProps) {
       setError(null);
 
       const response = await fetch(
-        "https://farmazgz.onrender.com/api/pharmacies"
+        "https://farmazgz.onrender.com/api/pharmacies/today"
       );
 
       if (!response.ok) {
@@ -41,8 +40,22 @@ export function PharmacyProvider({ children }: PharmacyProviderProps) {
       }
 
       const data = await response.json();
-      setPharmacies(data);
+
+      let pharmaciesArray: Pharmacy[] = [];
+
+      if (Array.isArray(data)) {
+        pharmaciesArray = data;
+      } else if (data && Array.isArray(data.pharmacies)) {
+        pharmaciesArray = data.pharmacies;
+      } else {
+        console.error("❌ Formato inesperado:", data);
+        throw new Error("Formato de respuesta inválido");
+      }
+
+      setPharmacies(pharmaciesArray);
     } catch (err) {
+      console.error("Error fetching pharmacies:", err);
+      setPharmacies([]);
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
       setLoading(false);
@@ -53,10 +66,6 @@ export function PharmacyProvider({ children }: PharmacyProviderProps) {
     fetchPharmacies();
   }, []);
 
-  const getPharmacyById = (id: string) => {
-    return pharmacies.find((pharmacy) => pharmacy.id === id);
-  };
-
   const refetch = async () => {
     await fetchPharmacies();
   };
@@ -65,7 +74,6 @@ export function PharmacyProvider({ children }: PharmacyProviderProps) {
     pharmacies,
     loading,
     error,
-    getPharmacyById,
     refetch,
   };
 
