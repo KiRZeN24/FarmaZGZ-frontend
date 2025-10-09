@@ -21,7 +21,7 @@ export default function PharmacyContainer() {
         </p>
         <PharmacyList pharmacies={pharmacies} />
         <p className="text-xs text-gray-500 mt-6">
-          Datos actualizados desde la API del backend
+          Datos actualizados desde la API del Ayuntamiento de Zaragoza
         </p>
       </div>
     </div>

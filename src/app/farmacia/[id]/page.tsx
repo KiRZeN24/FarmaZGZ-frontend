@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { Pharmacy } from "@/types";
+import { useAuth } from "@/contexts/AuthContext";
+import { API_CONFIG } from "@/config/api.config";
 
 interface PharmacyDetailProps {
   params: Promise<{ id: string }>;
@@ -11,16 +13,17 @@ interface PharmacyDetailProps {
 
 export default function PharmacyDetail({ params }: PharmacyDetailProps) {
   const { id } = use(params);
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
   const [pharmacy, setPharmacy] = useState<Pharmacy | null>(null);
   const [loading, setLoading] = useState(true);
+  const [validating, setValidating] = useState(false);
 
   useEffect(() => {
     const fetchPharmacy = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
-          `https://farmazgz.onrender.com/api/pharmacies/${id}`
-        );
+        const response = await fetch(`${API_CONFIG.baseURL}/pharmacies/${id}`);
 
         if (!response.ok) {
           setPharmacy(null);
@@ -40,6 +43,46 @@ export default function PharmacyDetail({ params }: PharmacyDetailProps) {
 
     fetchPharmacy();
   }, [id]);
+
+  const handleValidation = async (isValid: boolean) => {
+    if (!isAuthenticated) {
+      sessionStorage.setItem("redirectAfterLogin", window.location.pathname);
+      router.push("/login");
+      return;
+    }
+
+    setValidating(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:3001/api/validations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          pharmacyId: id,
+          isValid,
+        }),
+      });
+
+      if (response.ok) {
+        const message = isValid
+          ? "✅ ¡Gracias por validar esta farmacia como correcta!"
+          : "❌ Gracias por reportar que la información no es correcta";
+
+        alert(message);
+      } else {
+        const error = await response.json();
+        alert(`Error: ${error.message || "No se pudo enviar la validación"}`);
+      }
+    } catch (error) {
+      console.error("Error al validar:", error);
+      alert("Error de conexión al enviar la validación");
+    } finally {
+      setValidating(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -87,17 +130,39 @@ export default function PharmacyDetail({ params }: PharmacyDetailProps) {
 
           <div className="mt-4 md:mt-0 text-center">
             <div className="text-sm text-gray-600 mb-3">
-              Información verificada
+              ¿Es correcta esta información?
             </div>
 
             <div className="flex gap-2 justify-center">
-              <button className="btn btn-sm bg-green-500 hover:bg-green-600 text-white border-none">
-                👍 Es correcto
+              <button
+                onClick={() => handleValidation(true)}
+                disabled={validating}
+                className="btn btn-sm bg-green-500 hover:bg-green-600 text-white border-none disabled:bg-gray-400"
+              >
+                {validating ? (
+                  <span className="loading loading-spinner loading-xs"></span>
+                ) : (
+                  "👍 Es correcto"
+                )}
               </button>
-              <button className="btn btn-sm bg-red-500 hover:bg-red-600 text-white border-none">
-                👎 No es correcto
+              <button
+                onClick={() => handleValidation(false)}
+                disabled={validating}
+                className="btn btn-sm bg-red-500 hover:bg-red-600 text-white border-none disabled:bg-gray-400"
+              >
+                {validating ? (
+                  <span className="loading loading-spinner loading-xs"></span>
+                ) : (
+                  "👎 No es correcto"
+                )}
               </button>
             </div>
+
+            {!isAuthenticated && (
+              <p className="text-xs text-gray-500 mt-2">
+                Debes iniciar sesión para validar
+              </p>
+            )}
           </div>
         </div>
       </div>

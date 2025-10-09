@@ -7,6 +7,7 @@ import {
   useEffect,
 } from "react";
 import { Pharmacy } from "@/types";
+import { API_CONFIG } from "@/config/api.config";
 
 interface PharmacyContextType {
   pharmacies: Pharmacy[];
@@ -31,9 +32,7 @@ export function PharmacyProvider({ children }: PharmacyProviderProps) {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(
-        "https://farmazgz.onrender.com/api/pharmacies/today"
-      );
+      const response = await fetch(`${API_CONFIG.baseURL}/pharmacies/today`);
 
       if (!response.ok) {
         throw new Error("Error al cargar farmacias");
@@ -48,7 +47,7 @@ export function PharmacyProvider({ children }: PharmacyProviderProps) {
       } else if (data && Array.isArray(data.pharmacies)) {
         pharmaciesArray = data.pharmacies;
       } else {
-        console.error("❌ Formato inesperado:", data);
+        console.error("Formato inesperado:", data);
         throw new Error("Formato de respuesta inválido");
       }
 
