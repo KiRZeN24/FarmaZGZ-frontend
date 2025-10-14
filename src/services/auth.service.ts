@@ -23,12 +23,10 @@ export const authService = {
     return response.json();
   },
 
-  async register(data: RegisterRequest): Promise<AuthResponse> {
+  async register(data: RegisterRequest) {
     const response = await fetch(`${API_CONFIG.baseURL}/auth/signup`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
 
@@ -37,7 +35,12 @@ export const authService = {
       throw new Error(error.message || "Error al registrarse");
     }
 
-    return response.json();
+    const result = await response.json();
+
+    return {
+      token: result.access_token || result.token,
+      user: result.user,
+    };
   },
 
   async getProfile(token: string) {
