@@ -141,7 +141,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="divider">O</div>
+          <div className="divider text-gray-600 font-semibold">O</div>
 
           <p className="text-center text-gray-600">
             ¿No tienes cuenta?{" "}
@@ -153,7 +153,7 @@ export default function LoginPage() {
             </Link>
           </p>
 
-          <Link href="/" className="btn btn-ghost w-full mt-2">
+          <Link href="/" className="btn btn-outline btn-success w-full mt-2">
             ← Volver al inicio
           </Link>
         </div>
