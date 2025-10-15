@@ -11,3 +11,23 @@ export interface Pharmacy {
   guard_date: string;
   last_updated: string;
 }
+
+export interface Stats {
+  totalUsers: number;
+  totalPharmacies: number;
+  totalValidations: number;
+  todayPharmacies: number;
+}
+
+export interface User {
+  id: string;
+  username: string;
+  role: string;
+  createdAt: string;
+}
+
+export interface UpdateUserData {
+  username: string;
+  role: "USER" | "ADMIN";
+  password?: string;
+}
