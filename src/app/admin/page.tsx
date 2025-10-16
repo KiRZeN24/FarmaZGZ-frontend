@@ -22,8 +22,11 @@ export default function AdminDashboard() {
   const [editUsername, setEditUsername] = useState("");
   const [editRole, setEditRole] = useState<"USER" | "ADMIN">("USER");
   const [editPassword, setEditPassword] = useState("");
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newUsername, setNewUsername] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newRole, setNewRole] = useState<"USER" | "ADMIN">("USER");
 
-  // Después de los estados, antes de useEffect
   const getUsersPaginated = () => {
     const startIndex = (currentUserPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -52,7 +55,6 @@ export default function AdminDashboard() {
         role: editRole,
       };
 
-      // Solo incluir password si se proporcionó uno nuevo
       if (editPassword.trim()) {
         updateData.password = editPassword;
       }
@@ -84,6 +86,40 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_CONFIG.baseURL}/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          username: newUsername,
+          password: newPassword,
+          role: newRole,
+        }),
+      });
+
+      if (response.ok) {
+        alert("✅ Usuario creado correctamente");
+        setShowCreateModal(false);
+        setNewUsername("");
+        setNewPassword("");
+        setNewRole("USER");
+        fetchDashboardData();
+      } else {
+        const error = await response.json();
+        alert(`❌ Error: ${error.message || "No se pudo crear el usuario"}`);
+      }
+    } catch (error) {
+      alert("❌ Error al crear usuario");
+    }
+  };
+
   const openEditModal = (user: User) => {
     setEditingUser(user);
     setEditUsername(user.username);
@@ -106,7 +142,7 @@ export default function AdminDashboard() {
           }),
           fetch(`${API_CONFIG.baseURL}/pharmacies`),
           fetch(`${API_CONFIG.baseURL}/pharmacies/today`),
-          fetch(`${API_CONFIG.baseURL}/validations/stats`), // ✅ Nuevo endpoint
+          fetch(`${API_CONFIG.baseURL}/validations/stats`),
         ]);
 
       const usersData = await usersRes.json();
@@ -118,7 +154,7 @@ export default function AdminDashboard() {
       setStats({
         totalUsers: usersData.length,
         totalPharmacies: pharmaciesData.length,
-        totalValidations: validationsData.total, // ✅ Valor real desde backend
+        totalValidations: validationsData.total,
         todayPharmacies: todayData.count || todayData.pharmacies?.length || 0,
       });
     } catch (error) {
@@ -179,8 +215,8 @@ export default function AdminDashboard() {
 
       if (response.ok) {
         alert("✅ Farmacia eliminada correctamente");
-        fetchPharmacies(); // Recargar lista
-        fetchDashboardData(); // Actualizar estadísticas
+        fetchPharmacies();
+        fetchDashboardData();
       } else {
         throw new Error("Error al eliminar farmacia");
       }
@@ -322,15 +358,23 @@ export default function AdminDashboard() {
               <h2 className="text-xl font-semibold text-green-800">
                 👥 Usuarios Registrados ({users.length})
               </h2>
-              <button
-                onClick={() => {
-                  setShowUsers(false);
-                  setCurrentUserPage(1);
-                }}
-                className="btn btn-sm btn-error btn-outline"
-              >
-                ✕ Cerrar
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowCreateModal(true)}
+                  className="btn btn-sm btn-success"
+                >
+                  ➕ Crear Usuario
+                </button>
+                <button
+                  onClick={() => {
+                    setShowUsers(false);
+                    setCurrentUserPage(1);
+                  }}
+                  className="btn btn-sm btn-error btn-outline"
+                >
+                  ✕ Cerrar
+                </button>
+              </div>
             </div>
 
             <div className="overflow-x-auto">
@@ -602,6 +646,167 @@ export default function AdminDashboard() {
                     setEditUsername("");
                     setEditRole("USER");
                     setEditPassword("");
+                  }}
+                  className="btn btn-error btn-outline flex-1"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Modal de creación de usuario */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-xl font-bold text-green-800 mb-4">
+              ➕ Crear Nuevo Usuario
+            </h3>
+
+            <form onSubmit={handleCreateUser} className="space-y-4">
+              <div>
+                <label className="label">
+                  <span className="label-text font-semibold">Usuario</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  minLength={3}
+                  maxLength={30}
+                  value={newUsername}
+                  onChange={(e) => setNewUsername(e.target.value)}
+                  className="input input-bordered w-full"
+                  placeholder="Nombre de usuario"
+                />
+              </div>
+
+              <div>
+                <label className="label">
+                  <span className="label-text font-semibold">Contraseña</span>
+                </label>
+                <input
+                  type="password"
+                  required
+                  minLength={8}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="input input-bordered w-full"
+                  placeholder="Contraseña"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Mínimo 8 caracteres.
+                </p>
+              </div>
+
+              <div>
+                <label className="label">
+                  <span className="label-text font-semibold">Rol</span>
+                </label>
+                <select
+                  value={newRole}
+                  onChange={(e) =>
+                    setNewRole(e.target.value as "USER" | "ADMIN")
+                  }
+                  className="select select-bordered w-full"
+                >
+                  <option value="USER">Usuario</option>
+                  <option value="ADMIN">Administrador</option>
+                </select>
+              </div>
+
+              <div className="flex gap-2">
+                <button type="submit" className="btn btn-success flex-1">
+                  ✅ Crear
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowCreateModal(false);
+                    setNewUsername("");
+                    setNewPassword("");
+                    setNewRole("USER");
+                  }}
+                  className="btn btn-error btn-outline flex-1"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de creación de usuario */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-xl font-bold text-green-800 mb-4">
+              ➕ Crear Nuevo Usuario
+            </h3>
+
+            <form onSubmit={handleCreateUser} className="space-y-4">
+              <div>
+                <label className="label">
+                  <span className="label-text font-semibold">Usuario</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  minLength={3}
+                  maxLength={30}
+                  value={newUsername}
+                  onChange={(e) => setNewUsername(e.target.value)}
+                  className="input input-bordered w-full"
+                  placeholder="Nombre de usuario"
+                />
+              </div>
+
+              <div>
+                <label className="label">
+                  <span className="label-text font-semibold">Contraseña</span>
+                </label>
+                <input
+                  type="password"
+                  required
+                  minLength={8}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="input input-bordered w-full"
+                  placeholder="Contraseña"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Mínimo 8 caracteres.
+                </p>
+              </div>
+
+              <div>
+                <label className="label">
+                  <span className="label-text font-semibold">Rol</span>
+                </label>
+                <select
+                  value={newRole}
+                  onChange={(e) =>
+                    setNewRole(e.target.value as "USER" | "ADMIN")
+                  }
+                  className="select select-bordered w-full"
+                >
+                  <option value="USER">Usuario</option>
+                  <option value="ADMIN">Administrador</option>
+                </select>
+              </div>
+
+              <div className="flex gap-2">
+                <button type="submit" className="btn btn-success flex-1">
+                  ✅ Crear
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowCreateModal(false);
+                    setNewUsername("");
+                    setNewPassword("");
+                    setNewRole("USER");
                   }}
                   className="btn btn-error btn-outline flex-1"
                 >
