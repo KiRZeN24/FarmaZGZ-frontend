@@ -152,8 +152,6 @@ export default function AdminDashboard() {
       const todayData = await todayRes.json();
       const validationsData = await validationsRes.json();
 
-      console.log("✅ Validations data:", validationsData);
-
       setUsers(usersData);
       setStats({
         totalUsers: usersData.length,
