@@ -16,6 +16,7 @@ export interface Stats {
   totalUsers: number;
   totalPharmacies: number;
   totalValidations: number;
+  todayValidations: number;
   todayPharmacies: number;
 }
 

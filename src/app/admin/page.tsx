@@ -142,7 +142,9 @@ export default function AdminDashboard() {
           }),
           fetch(`${API_CONFIG.baseURL}/pharmacies`),
           fetch(`${API_CONFIG.baseURL}/pharmacies/today`),
-          fetch(`${API_CONFIG.baseURL}/validations/stats`),
+          fetch(`${API_CONFIG.baseURL}/validations/stats`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
         ]);
 
       const usersData = await usersRes.json();
@@ -150,11 +152,14 @@ export default function AdminDashboard() {
       const todayData = await todayRes.json();
       const validationsData = await validationsRes.json();
 
+      console.log("✅ Validations data:", validationsData);
+
       setUsers(usersData);
       setStats({
         totalUsers: usersData.length,
         totalPharmacies: pharmaciesData.length,
         totalValidations: validationsData.total,
+        todayValidations: validationsData.today,
         todayPharmacies: todayData.count || todayData.pharmacies?.length || 0,
       });
     } catch (error) {
@@ -270,7 +275,7 @@ export default function AdminDashboard() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           <div className="farma-card">
             <h3 className="text-lg font-semibold text-gray-700 mb-2">
               👥 Usuarios Totales
@@ -298,12 +303,22 @@ export default function AdminDashboard() {
             </p>
           </div>
 
+          {/* Validaciones totales */}
           <div className="farma-card">
             <h3 className="text-lg font-semibold text-gray-700 mb-2">
-              📊 Validaciones
+              📊 Validaciones Totales
             </h3>
             <p className="text-4xl font-bold text-purple-600">
               {stats?.totalValidations || 0}
+            </p>
+          </div>
+
+          <div className="farma-card">
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+              🎯 Validaciones Hoy
+            </h3>
+            <p className="text-4xl font-bold text-orange-600">
+              {stats?.todayValidations || 0}
             </p>
           </div>
         </div>
@@ -574,6 +589,7 @@ export default function AdminDashboard() {
           </div>
         )}
       </div>
+
       {/* Modal de edición de usuario */}
       {editingUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -656,6 +672,7 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
       {/* Modal de creación de usuario */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
