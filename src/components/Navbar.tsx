@@ -2,6 +2,12 @@
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePathname } from "next/navigation";
+import { MdLocalPharmacy } from "react-icons/md";
+import {
+  HiUserCircle,
+  HiArrowRightOnRectangle,
+  HiCog6Tooth,
+} from "react-icons/hi2";
 
 export default function Navbar() {
   const { user, logout, isAuthenticated, loading } = useAuth();
@@ -18,7 +24,7 @@ export default function Navbar() {
           href="/"
           className="btn btn-ghost text-xl text-green-800 hover:bg-green-100"
         >
-          <span className="text-2xl mr-2">🏥</span>
+          <MdLocalPharmacy className="text-3xl text-red-500 mr-2" />
           FarmaZGZ
         </Link>
       </div>
@@ -57,17 +63,19 @@ export default function Navbar() {
                 <li>
                   <Link
                     href="/perfil"
-                    className="hover:bg-green-50 hover:text-green-800"
+                    className="hover:bg-green-50 hover:text-green-800 flex items-center gap-2"
                   >
-                    👤 Mi Perfil
+                    <HiUserCircle className="text-xl" />
+                    Mi Perfil
                   </Link>
                 </li>
                 <li>
                   <button
                     onClick={logout}
-                    className="hover:bg-red-50 hover:text-red-600"
+                    className="hover:bg-red-50 hover:text-red-600 flex items-center gap-2"
                   >
-                    🚪 Cerrar Sesión
+                    <HiArrowRightOnRectangle className="text-xl" />
+                    Cerrar Sesión
                   </button>
                 </li>
               </ul>
@@ -87,7 +95,6 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* Menú móvil */}
         <div className="dropdown dropdown-end lg:hidden">
           <div
             tabIndex={0}
@@ -117,27 +124,30 @@ export default function Navbar() {
                 <li>
                   <Link
                     href="/perfil"
-                    className="hover:bg-green-50 hover:text-green-800"
+                    className="hover:bg-green-50 hover:text-green-800 flex items-center gap-2"
                   >
-                    👤 Mi Perfil
+                    <HiUserCircle className="text-xl" />
+                    Mi Perfil
                   </Link>
                 </li>
                 {user.role === "ADMIN" && (
                   <li>
                     <Link
                       href="/admin"
-                      className="hover:bg-green-50 hover:text-green-800"
+                      className="hover:bg-green-50 hover:text-green-800 flex items-center gap-2"
                     >
-                      ⚙️ Panel Admin
+                      <HiCog6Tooth className="text-xl" />
+                      Panel Admin
                     </Link>
                   </li>
                 )}
                 <li>
                   <button
                     onClick={logout}
-                    className="hover:bg-red-50 hover:text-red-600"
+                    className="hover:bg-red-50 hover:text-red-600 flex items-center gap-2"
                   >
-                    🚪 Cerrar Sesión
+                    <HiArrowRightOnRectangle className="text-xl" />
+                    Cerrar Sesión
                   </button>
                 </li>
               </>
