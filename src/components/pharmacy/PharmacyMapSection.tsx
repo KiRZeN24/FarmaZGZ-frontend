@@ -1,5 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
+import { HiMapPin, HiMagnifyingGlass } from "react-icons/hi2";
+import { FaCar } from "react-icons/fa";
 
 const PharmacyMap = dynamic(() => import("@/components/PharmacyMap"), {
   ssr: false,
@@ -25,8 +27,9 @@ export default function PharmacyMapSection({
 }: PharmacyMapSectionProps) {
   return (
     <div className="farma-card mb-6">
-      <h2 className="text-xl font-semibold text-green-800 mb-4">
-        📍 Ubicación
+      <h2 className="text-xl font-semibold text-green-800 mb-4 flex items-center gap-2">
+        <HiMapPin className="text-2xl" />
+        Ubicación
       </h2>
 
       {latitude && longitude ? (
@@ -39,7 +42,7 @@ export default function PharmacyMapSection({
       ) : (
         <div className="bg-gray-200 h-64 md:h-80 rounded-lg flex items-center justify-center">
           <div className="text-center text-gray-600">
-            <div className="text-4xl mb-2">📍</div>
+            <HiMapPin className="text-6xl mx-auto mb-2" />
             <p>Ubicación no disponible</p>
           </div>
         </div>
@@ -51,9 +54,10 @@ export default function PharmacyMapSection({
             href={`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn farma-btn-primary"
+            className="btn farma-btn-primary flex items-center gap-2"
           >
-            🚗 Cómo llegar
+            <FaCar className="text-lg" />
+            Cómo llegar
           </a>
         ) : (
           <a
@@ -62,9 +66,10 @@ export default function PharmacyMapSection({
             )}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn farma-btn-primary"
+            className="btn farma-btn-primary flex items-center gap-2"
           >
-            🧭 Buscar en Google Maps
+            <HiMagnifyingGlass className="text-lg" />
+            Buscar en Google Maps
           </a>
         )}
       </div>

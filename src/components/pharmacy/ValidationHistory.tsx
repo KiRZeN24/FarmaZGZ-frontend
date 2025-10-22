@@ -1,4 +1,5 @@
 "use client";
+import { HiHandThumbUp, HiHandThumbDown } from "react-icons/hi2";
 
 interface Validation {
   isValid: boolean;
@@ -13,7 +14,7 @@ interface ValidationHistoryProps {
 
 export default function ValidationHistory({
   validations,
-}: ValidationHistoryProps) {
+}: Readonly<ValidationHistoryProps>) {
   if (validations.length === 0) {
     return null;
   }
@@ -29,11 +30,11 @@ export default function ValidationHistory({
             key={`${validation.username}-${validation.createdAt}`}
             className="flex items-center gap-2 text-sm"
           >
-            <span
-              className={validation.isValid ? "text-green-600" : "text-red-600"}
-            >
-              {validation.isValid ? "👍" : "👎"}
-            </span>
+            {validation.isValid ? (
+              <HiHandThumbUp className="text-green-600 text-lg" />
+            ) : (
+              <HiHandThumbDown className="text-red-600 text-lg" />
+            )}
             <span className="text-gray-700 font-medium">
               {validation.username}
             </span>

@@ -1,4 +1,5 @@
 "use client";
+import { HiHandThumbUp, HiHandThumbDown } from "react-icons/hi2";
 
 interface ValidationStats {
   total: number;
@@ -21,7 +22,7 @@ export default function ValidationSection({
   isAuthenticated,
   validating,
   onValidate,
-}: ValidationSectionProps) {
+}: Readonly<ValidationSectionProps>) {
   const getAccuracyColor = (rate: number | null) => {
     if (rate === null) return "text-gray-500";
     if (rate >= 80) return "text-green-600";
@@ -74,23 +75,29 @@ export default function ValidationSection({
         <button
           onClick={() => onValidate(true)}
           disabled={validating || userHasValidated}
-          className="btn btn-sm bg-green-500 hover:bg-green-600 text-white border-none disabled:bg-gray-400"
+          className="btn btn-sm bg-green-500 hover:bg-green-600 text-white border-none disabled:bg-gray-400 flex items-center gap-1"
         >
           {validating ? (
             <span className="loading loading-spinner loading-xs"></span>
           ) : (
-            "Es correcto"
+            <>
+              <HiHandThumbUp className="text-lg" />
+              Es correcto
+            </>
           )}
         </button>
         <button
           onClick={() => onValidate(false)}
           disabled={validating || userHasValidated}
-          className="btn btn-sm bg-red-500 hover:bg-red-600 text-white border-none disabled:bg-gray-400"
+          className="btn btn-sm bg-red-500 hover:bg-red-600 text-white border-none disabled:bg-gray-400 flex items-center gap-1"
         >
           {validating ? (
             <span className="loading loading-spinner loading-xs"></span>
           ) : (
-            "No es correcto"
+            <>
+              <HiHandThumbDown className="text-lg" />
+              No es correcto
+            </>
           )}
         </button>
       </div>

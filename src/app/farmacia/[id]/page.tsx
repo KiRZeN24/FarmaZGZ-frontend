@@ -11,6 +11,7 @@ import PharmacyInfo from "@/components/pharmacy/PharmacyInfo";
 import ValidationSection from "@/components/pharmacy/ValidationSection";
 import ValidationHistory from "@/components/pharmacy/ValidationHistory";
 import PharmacyMapSection from "@/components/pharmacy/PharmacyMapSection";
+import { HiArrowLeft } from "react-icons/hi2";
 
 interface PharmacyDetailProps {
   params: Promise<{ id: string }>;
@@ -194,8 +195,12 @@ export default function PharmacyDetail({
       />
 
       <div className="text-center">
-        <Link href="/" className="btn btn-outline btn-success">
-          ← Volver a la lista
+        <Link
+          href="/"
+          className="btn btn-outline btn-success flex items-center gap-2 mx-auto w-fit"
+        >
+          <HiArrowLeft className="text-lg" />
+          Volver a la lista
         </Link>
       </div>
     </div>
