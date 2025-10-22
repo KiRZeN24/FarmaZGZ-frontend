@@ -2,178 +2,220 @@
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePathname } from "next/navigation";
-import { MdLocalPharmacy } from "react-icons/md";
+import { useState } from "react";
 import {
+  HiHome,
   HiUserCircle,
   HiArrowRightOnRectangle,
   HiCog6Tooth,
+  HiArrowLeftOnRectangle,
+  HiChevronDown,
 } from "react-icons/hi2";
+import { MdLocalPharmacy } from "react-icons/md";
 
 export default function Navbar() {
   const { user, logout, isAuthenticated, loading } = useAuth();
   const pathname = usePathname();
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   if (pathname === "/login" || pathname === "/registro") {
     return null;
   }
 
   return (
-    <div className="navbar bg-green-50 shadow-md border-b border-green-200">
-      <div className="navbar-start">
-        <Link
-          href="/"
-          className="btn btn-ghost text-xl text-green-800 hover:bg-green-100"
-        >
-          <MdLocalPharmacy className="text-3xl text-red-500 mr-2" />
-          FarmaZGZ
-        </Link>
-      </div>
-
-      <div className="navbar-end">
-        {loading ? (
-          <div className="loading loading-spinner loading-sm"></div>
-        ) : isAuthenticated && user ? (
-          <div className="hidden lg:flex items-center gap-4">
-            <span className="text-green-700 font-medium">
-              Hola, {user.username}
-            </span>
-
-            {user.role === "ADMIN" && (
-              <Link
-                href="/admin"
-                className="btn btn-ghost normal-case text-green-700 hover:bg-green-100"
-              >
-                Panel Admin
-              </Link>
-            )}
-
-            <div className="dropdown dropdown-end">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle avatar"
-              >
-                <div className="w-10 rounded-full bg-green-200 flex items-center justify-center">
-                  <span className="text-green-800 font-bold text-lg">
-                    {user.username.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-              </div>
-              <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                <li>
-                  <Link
-                    href="/perfil"
-                    className="hover:bg-green-50 hover:text-green-800 flex items-center gap-2"
-                  >
-                    <HiUserCircle className="text-xl" />
-                    Mi Perfil
-                  </Link>
-                </li>
-                <li>
-                  <button
-                    onClick={logout}
-                    className="hover:bg-red-50 hover:text-red-600 flex items-center gap-2"
-                  >
-                    <HiArrowRightOnRectangle className="text-xl" />
-                    Cerrar Sesión
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        ) : (
-          <div className="hidden lg:flex items-center gap-2">
-            <Link
-              href="/login"
-              className="btn btn-ghost normal-case text-green-700 hover:bg-green-100"
-            >
-              Iniciar Sesión
-            </Link>
-            <Link href="/registro" className="btn farma-btn-primary">
-              Registrarse
-            </Link>
-          </div>
-        )}
-
-        <div className="dropdown dropdown-end lg:hidden">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-square text-green-800 hover:bg-green-100"
+    <nav className="bg-green-50 shadow-md border-b border-green-200">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <Link
+            href="/"
+            className="flex items-center gap-2 font-bold text-xl text-green-800 hover:text-green-600 transition-colors"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            <MdLocalPharmacy className="text-3xl text-red-500" />
+            FarmaZGZ
+          </Link>
+
+          <div className="flex items-center gap-4">
+            <Link
+              href="/"
+              className="hidden lg:flex items-center gap-2 text-green-700 hover:text-green-800 transition-colors px-3 py-2 rounded-md hover:bg-green-100"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              ></path>
-            </svg>
-          </div>
-          <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-            {isAuthenticated && user ? (
+              <HiHome className="text-xl" />
+              <span>Inicio</span>
+            </Link>
+
+            {loading ? (
+              <div className="loading loading-spinner loading-sm"></div>
+            ) : isAuthenticated && user ? (
               <>
-                <li className="menu-title">
-                  <span>Hola, {user.username}</span>
-                </li>
-                <li>
-                  <Link
-                    href="/perfil"
-                    className="hover:bg-green-50 hover:text-green-800 flex items-center gap-2"
-                  >
-                    <HiUserCircle className="text-xl" />
-                    Mi Perfil
-                  </Link>
-                </li>
                 {user.role === "ADMIN" && (
-                  <li>
-                    <Link
-                      href="/admin"
-                      className="hover:bg-green-50 hover:text-green-800 flex items-center gap-2"
-                    >
-                      <HiCog6Tooth className="text-xl" />
-                      Panel Admin
-                    </Link>
-                  </li>
-                )}
-                <li>
-                  <button
-                    onClick={logout}
-                    className="hover:bg-red-50 hover:text-red-600 flex items-center gap-2"
+                  <Link
+                    href="/admin"
+                    className="hidden lg:flex items-center gap-2 text-green-700 hover:text-green-800 transition-colors px-3 py-2 rounded-md hover:bg-green-100"
                   >
-                    <HiArrowRightOnRectangle className="text-xl" />
-                    Cerrar Sesión
+                    <HiCog6Tooth className="text-xl" />
+                    Panel Admin
+                  </Link>
+                )}
+
+                <div className="hidden lg:block relative">
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center gap-2 text-green-700 hover:text-green-800 transition-colors px-3 py-2 rounded-md hover:bg-green-100"
+                  >
+                    <HiUserCircle className="text-2xl" />
+                    <span>{user.username}</span>
+                    <HiChevronDown className="text-lg" />
                   </button>
-                </li>
+
+                  {showUserMenu && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setShowUserMenu(false)}
+                      />
+
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-green-200">
+                        <Link
+                          href="/perfil"
+                          className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-800"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <HiUserCircle className="text-xl" />
+                          Mi Perfil
+                        </Link>
+
+                        <hr className="my-1 border-green-100" />
+
+                        <button
+                          onClick={() => {
+                            logout();
+                            setShowUserMenu(false);
+                          }}
+                          className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left"
+                        >
+                          <HiArrowRightOnRectangle className="text-xl" />
+                          Cerrar Sesión
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <div className="dropdown dropdown-end lg:hidden">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-ghost btn-square text-green-800 hover:bg-green-100"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 6h16M4 12h16M4 18h16"
+                      ></path>
+                    </svg>
+                  </div>
+                  <ul className="menu menu-sm dropdown-content bg-white rounded-box z-[1] mt-3 w-52 p-2 shadow border border-green-200">
+                    <li className="menu-title">
+                      <span>{user.username}</span>
+                    </li>
+                    <li>
+                      <Link
+                        href="/perfil"
+                        className="hover:bg-green-50 hover:text-green-800 flex items-center gap-2"
+                      >
+                        <HiUserCircle className="text-xl" />
+                        Mi Perfil
+                      </Link>
+                    </li>
+                    {user.role === "ADMIN" && (
+                      <li>
+                        <Link
+                          href="/admin"
+                          className="hover:bg-green-50 hover:text-green-800 flex items-center gap-2"
+                        >
+                          <HiCog6Tooth className="text-xl" />
+                          Panel Admin
+                        </Link>
+                      </li>
+                    )}
+                    <li>
+                      <button
+                        onClick={logout}
+                        className="hover:bg-red-50 hover:text-red-600 flex items-center gap-2"
+                      >
+                        <HiArrowRightOnRectangle className="text-xl" />
+                        Cerrar Sesión
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </>
             ) : (
               <>
-                <li>
+                <div className="hidden lg:flex items-center gap-2">
                   <Link
                     href="/login"
-                    className="hover:bg-green-50 hover:text-green-800"
+                    className="flex items-center gap-2 text-green-700 hover:text-green-800 transition-colors px-3 py-2 rounded-md hover:bg-green-100"
                   >
+                    <HiArrowLeftOnRectangle className="text-xl" />
                     Iniciar Sesión
                   </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/registro"
-                    className="hover:bg-green-50 hover:text-green-800"
-                  >
+                  <Link href="/registro" className="btn farma-btn-primary">
                     Registrarse
                   </Link>
-                </li>
+                </div>
+
+                <div className="dropdown dropdown-end lg:hidden">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-ghost btn-square text-green-800 hover:bg-green-100"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 6h16M4 12h16M4 18h16"
+                      ></path>
+                    </svg>
+                  </div>
+                  <ul className="menu menu-sm dropdown-content bg-white rounded-box z-[1] mt-3 w-52 p-2 shadow border border-green-200">
+                    <li>
+                      <Link
+                        href="/login"
+                        className="hover:bg-green-50 hover:text-green-800"
+                      >
+                        Iniciar Sesión
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/registro"
+                        className="hover:bg-green-50 hover:text-green-800"
+                      >
+                        Registrarse
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
               </>
             )}
-          </ul>
+          </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 }
