@@ -1,5 +1,6 @@
 "use client";
-import { User, UpdateUserData } from "@/types";
+import { User } from "@/types";
+import { HiPencil, HiCheckCircle, HiXMark } from "react-icons/hi2";
 
 interface UserEditModalProps {
   user: User;
@@ -23,11 +24,12 @@ export default function UserEditModal({
   onPasswordChange,
   onSubmit,
   onClose,
-}: UserEditModalProps) {
+}: Readonly<UserEditModalProps>) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-        <h3 className="text-xl font-bold text-green-800 mb-4">
+        <h3 className="text-xl font-bold text-green-800 mb-4 flex items-center gap-2">
+          <HiPencil className="text-2xl" />
           Editar Usuario
         </h3>
 
@@ -83,14 +85,19 @@ export default function UserEditModal({
           </div>
 
           <div className="flex gap-2">
-            <button type="submit" className="btn btn-success flex-1">
-              💾 Guardar
+            <button
+              type="submit"
+              className="btn btn-success flex-1 flex items-center gap-2"
+            >
+              <HiCheckCircle className="text-lg" />
+              Guardar
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="btn btn-error btn-outline flex-1"
+              className="btn btn-error btn-outline flex-1 flex items-center gap-2"
             >
+              <HiXMark className="text-lg" />
               Cancelar
             </button>
           </div>

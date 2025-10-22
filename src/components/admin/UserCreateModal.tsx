@@ -1,4 +1,5 @@
 "use client";
+import { HiPlusCircle, HiCheckCircle, HiXMark } from "react-icons/hi2";
 
 interface UserCreateModalProps {
   username: string;
@@ -20,12 +21,13 @@ export default function UserCreateModal({
   onRoleChange,
   onSubmit,
   onClose,
-}: UserCreateModalProps) {
+}: Readonly<UserCreateModalProps>) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-        <h3 className="text-xl font-bold text-green-800 mb-4">
-          ➕ Crear Nuevo Usuario
+        <h3 className="text-xl font-bold text-green-800 mb-4 flex items-center gap-2">
+          <HiPlusCircle className="text-2xl" />
+          Crear Nuevo Usuario
         </h3>
 
         <form onSubmit={onSubmit} className="space-y-4">
@@ -76,14 +78,19 @@ export default function UserCreateModal({
           </div>
 
           <div className="flex gap-2">
-            <button type="submit" className="btn btn-success flex-1">
-              ✅ Crear
+            <button
+              type="submit"
+              className="btn btn-success flex-1 flex items-center gap-2"
+            >
+              <HiCheckCircle className="text-lg" />
+              Crear
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="btn btn-error btn-outline flex-1"
+              className="btn btn-error btn-outline flex-1 flex items-center gap-2"
             >
+              <HiXMark className="text-lg" />
               Cancelar
             </button>
           </div>

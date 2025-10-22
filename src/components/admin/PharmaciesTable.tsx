@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Pharmacy } from "@/types";
+import { HiBuildingStorefront, HiXMark, HiEye } from "react-icons/hi2";
 
 interface PharmaciesTableProps {
   pharmacies: Pharmacy[];
@@ -11,7 +12,7 @@ interface PharmaciesTableProps {
 export default function PharmaciesTable({
   pharmacies,
   onClose,
-}: PharmaciesTableProps) {
+}: Readonly<PharmaciesTableProps>) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -26,17 +27,19 @@ export default function PharmaciesTable({
   return (
     <div className="farma-card mb-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-green-800">
-          🏥 Todas las Farmacias ({pharmacies.length})
+        <h2 className="text-xl font-semibold text-green-800 flex items-center gap-2">
+          <HiBuildingStorefront className="text-2xl" />
+          Todas las Farmacias ({pharmacies.length})
         </h2>
         <button
           onClick={() => {
             onClose();
             setCurrentPage(1);
           }}
-          className="btn btn-sm btn-error btn-outline"
+          className="btn btn-sm btn-error btn-outline flex items-center gap-1"
         >
-          ✕ Cerrar
+          <HiXMark className="text-lg" />
+          Cerrar
         </button>
       </div>
 
@@ -66,9 +69,10 @@ export default function PharmaciesTable({
                 <td>
                   <Link
                     href={`/farmacia/${pharmacy.id}`}
-                    className="btn btn-sm btn-info"
+                    className="btn btn-sm btn-info flex items-center gap-1"
                   >
-                    👁️ Ver
+                    <HiEye className="text-lg" />
+                    Ver
                   </Link>
                 </td>
               </tr>

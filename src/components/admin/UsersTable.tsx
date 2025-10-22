@@ -1,6 +1,13 @@
 "use client";
 import { useState } from "react";
 import { User } from "@/types";
+import {
+  HiUsers,
+  HiXMark,
+  HiPlusCircle,
+  HiPencil,
+  HiTrash,
+} from "react-icons/hi2";
 
 interface UsersTableProps {
   users: User[];
@@ -16,7 +23,7 @@ export default function UsersTable({
   onEdit,
   onDelete,
   onCreate,
-}: UsersTableProps) {
+}: Readonly<UsersTableProps>) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -31,21 +38,27 @@ export default function UsersTable({
   return (
     <div className="farma-card mb-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-green-800">
-          👥 Usuarios Registrados ({users.length})
+        <h2 className="text-xl font-semibold text-green-800 flex items-center gap-2">
+          <HiUsers className="text-2xl" />
+          Usuarios Registrados ({users.length})
         </h2>
         <div className="flex gap-2">
-          <button onClick={onCreate} className="btn btn-sm btn-success">
-            ➕ Crear Usuario
+          <button
+            onClick={onCreate}
+            className="btn btn-sm btn-success flex items-center gap-1"
+          >
+            <HiPlusCircle className="text-lg" />
+            Crear Usuario
           </button>
           <button
             onClick={() => {
               onClose();
               setCurrentPage(1);
             }}
-            className="btn btn-sm btn-error btn-outline"
+            className="btn btn-sm btn-error btn-outline flex items-center gap-1"
           >
-            ✕ Cerrar
+            <HiXMark className="text-lg" />
+            Cerrar
           </button>
         </div>
       </div>
@@ -83,16 +96,18 @@ export default function UsersTable({
                   <div className="flex gap-2">
                     <button
                       onClick={() => onEdit(user)}
-                      className="btn btn-sm btn-warning"
+                      className="btn btn-sm btn-warning flex items-center gap-1"
                     >
-                      ✏️ Editar
+                      <HiPencil className="text-lg" />
+                      Editar
                     </button>
                     <button
                       onClick={() => onDelete(user.id, user.username)}
                       className="btn btn-sm btn-error"
                       disabled={user.role === "ADMIN"}
                     >
-                      🗑️
+                      <HiTrash className="text-lg" />
+                      Eliminar
                     </button>
                   </div>
                 </td>

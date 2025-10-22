@@ -11,6 +11,7 @@ import UsersTable from "@/components/admin/UsersTable";
 import PharmaciesTable from "@/components/admin/PharmaciesTable";
 import UserEditModal from "@/components/admin/UserEditModal";
 import UserCreateModal from "@/components/admin/UserCreateModal";
+import { HiShieldCheck, HiArrowLeft } from "react-icons/hi2";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
@@ -95,6 +96,11 @@ export default function AdminDashboard() {
   };
 
   const fetchPharmacies = async () => {
+    if (showPharmacies) {
+      setShowPharmacies(false);
+      return;
+    }
+
     setLoadingPharmacies(true);
     try {
       const response = await fetch(`${API_CONFIG.baseURL}/pharmacies`);
@@ -229,11 +235,16 @@ export default function AdminDashboard() {
     <AdminRoute>
       <div className="container mx-auto p-4 max-w-7xl">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-green-800">
-            🛡️ Panel de Administración
+          <h1 className="text-3xl font-bold text-green-800 flex items-center gap-2">
+            <HiShieldCheck className="text-4xl" />
+            Panel de Administración
           </h1>
-          <Link href="/" className="btn btn-outline btn-success">
-            ← Volver al inicio
+          <Link
+            href="/"
+            className="btn btn-outline btn-success flex items-center gap-2"
+          >
+            <HiArrowLeft className="text-lg" />
+            Volver al inicio
           </Link>
         </div>
 
@@ -243,6 +254,7 @@ export default function AdminDashboard() {
           syncing={syncing}
           loadingPharmacies={loadingPharmacies}
           showUsers={showUsers}
+          showPharmacies={showPharmacies}
           onSyncPharmacies={handleSyncPharmacies}
           onFetchPharmacies={fetchPharmacies}
           onToggleUsers={() => setShowUsers(!showUsers)}
