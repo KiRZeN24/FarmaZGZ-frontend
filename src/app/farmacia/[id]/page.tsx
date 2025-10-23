@@ -81,7 +81,14 @@ export default function PharmacyDetail({
           if (myValidationsResponse.ok) {
             const myValidations = await myValidationsResponse.json();
             const hasValidated = myValidations.some(
-              (v: { pharmacyId: string }) => v.pharmacyId === id
+              (v: { pharmacyId: string; validationDate: string }) => {
+                const vDate = new Date(v.validationDate);
+                const pDate = new Date(pharmacyData.guard_date);
+                return (
+                  v.pharmacyId === id &&
+                  vDate.toDateString() === pDate.toDateString()
+                );
+              }
             );
             setUserHasValidated(hasValidated);
           }
@@ -99,8 +106,16 @@ export default function PharmacyDetail({
 
   const handleValidation = async (isValid: boolean) => {
     if (!isAuthenticated) {
-      sessionStorage.setItem("redirectAfterLogin", window.location.pathname);
+      sessionStorage.setItem(
+        "redirectAfterLogin",
+        globalThis.location.pathname
+      );
       router.push("/login");
+      return;
+    }
+
+    if (!pharmacy) {
+      alert("Error: No se pudo cargar la información de la farmacia");
       return;
     }
 
@@ -116,16 +131,16 @@ export default function PharmacyDetail({
         body: JSON.stringify({
           pharmacyId: id,
           isValid,
+          guardDate: pharmacy.guard_date,
         }),
       });
 
       if (response.ok) {
         const message = isValid
-          ? "✅ ¡Gracias por validar esta información como correcta!"
-          : "❌ Gracias por reportar que la información no es correcta";
+          ? "¡Gracias por validar esta información como correcta!"
+          : "Gracias por reportar que la información no es correcta";
 
         alert(message);
-
         setUserHasValidated(true);
 
         const statsResponse = await fetch(
@@ -137,7 +152,7 @@ export default function PharmacyDetail({
         }
       } else {
         const error = await response.json();
-        alert(`Error: ${error.message || "No se pudo enviar la validación"}`);
+        alert(error.message || "No se pudo enviar la validación");
       }
     } catch (error) {
       console.error("Error al validar:", error);
