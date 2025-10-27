@@ -2,6 +2,7 @@
 import { useState, FormEvent } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -17,8 +18,12 @@ export default function LoginPage() {
 
     try {
       await login({ username, password });
+      toast.success(`¡Bienvenido, ${username}!`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al iniciar sesión");
+      const errorMessage =
+        err instanceof Error ? err.message : "Error al iniciar sesión";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
