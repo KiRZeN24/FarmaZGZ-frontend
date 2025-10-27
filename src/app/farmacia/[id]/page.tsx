@@ -12,6 +12,7 @@ import ValidationSection from "@/components/pharmacy/ValidationSection";
 import ValidationHistory from "@/components/pharmacy/ValidationHistory";
 import PharmacyMapSection from "@/components/pharmacy/PharmacyMapSection";
 import { HiArrowLeft } from "react-icons/hi2";
+import toast from "react-hot-toast";
 
 interface PharmacyDetailProps {
   params: Promise<{ id: string }>;
@@ -96,6 +97,7 @@ export default function PharmacyDetail({
       } catch (error) {
         console.error("Error fetching pharmacy:", error);
         setPharmacy(null);
+        toast.error("Error al cargar la información de la farmacia");
       } finally {
         setLoading(false);
       }
@@ -115,7 +117,7 @@ export default function PharmacyDetail({
     }
 
     if (!pharmacy) {
-      alert("Error: No se pudo cargar la información de la farmacia");
+      toast.error("Error: No se pudo cargar la información de la farmacia");
       return;
     }
 
@@ -136,11 +138,12 @@ export default function PharmacyDetail({
       });
 
       if (response.ok) {
-        const message = isValid
-          ? "¡Gracias por validar esta información como correcta!"
-          : "Gracias por reportar que la información no es correcta";
+        if (isValid) {
+          toast.success("¡Gracias por validar esta información como correcta!");
+        } else {
+          toast.error("Gracias por reportar que la información no es correcta");
+        }
 
-        alert(message);
         setUserHasValidated(true);
 
         const statsResponse = await fetch(
@@ -152,11 +155,11 @@ export default function PharmacyDetail({
         }
       } else {
         const error = await response.json();
-        alert(error.message || "No se pudo enviar la validación");
+        toast.error(error.message || "No se pudo enviar la validación");
       }
     } catch (error) {
       console.error("Error al validar:", error);
-      alert("Error de conexión al enviar la validación");
+      toast.error("Error de conexión al enviar la validación");
     } finally {
       setValidating(false);
     }
