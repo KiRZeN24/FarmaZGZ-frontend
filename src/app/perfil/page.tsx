@@ -2,8 +2,18 @@
 import { useState, FormEvent } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { API_CONFIG } from "@/config/api.config";
+import {
+  HiLockClosed,
+  HiCheckCircle,
+  HiXCircle,
+  HiArrowLeft,
+  HiUser,
+  HiIdentification,
+  HiShieldCheck,
+} from "react-icons/hi2";
 
 export default function PerfilPage() {
   const { user } = useAuth();
@@ -13,20 +23,22 @@ export default function PerfilPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const handleChangePassword = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
 
     if (newPassword !== confirmPassword) {
-      setError("Las contraseñas no coinciden");
+      const errorMsg = "Las contraseñas no coinciden";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
     if (newPassword.length < 8) {
-      setError("La contraseña debe tener al menos 8 caracteres");
+      const errorMsg = "La contraseña debe tener al menos 8 caracteres";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
@@ -65,21 +77,17 @@ export default function PerfilPage() {
         throw new Error("Error al actualizar la contraseña");
       }
 
-      setSuccess("✅ Contraseña actualizada correctamente");
+      toast.success("Contraseña actualizada correctamente");
 
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-
       setShowPasswordForm(false);
-
-      setTimeout(() => {
-        setSuccess("");
-      }, 5000);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Error al cambiar contraseña"
-      );
+      const errorMsg =
+        err instanceof Error ? err.message : "Error al cambiar contraseña";
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -88,22 +96,29 @@ export default function PerfilPage() {
   return (
     <ProtectedRoute>
       <div className="container mx-auto p-4 max-w-4xl">
-        <h1 className="text-3xl font-bold text-green-800 mb-6">Mi Perfil</h1>
+        <h1 className="text-3xl font-bold text-green-800 mb-6 flex items-center gap-2">
+          <HiUser className="text-4xl" />
+          Mi Perfil
+        </h1>
 
         <div className="farma-card mb-6">
-          <h2 className="text-xl font-semibold text-green-800 mb-4">
+          <h2 className="text-xl font-semibold text-green-800 mb-4 flex items-center gap-2">
+            <HiIdentification className="text-2xl" />
             Información del Usuario
           </h2>
           <div className="space-y-3">
-            <div>
+            <div className="flex items-center gap-2">
+              <HiUser className="text-xl text-green-600" />
               <span className="font-semibold text-gray-700">Usuario:</span>{" "}
               <span className="text-gray-900">{user?.username}</span>
             </div>
-            <div>
+            <div className="flex items-center gap-2">
+              <HiIdentification className="text-xl text-blue-600" />
               <span className="font-semibold text-gray-700">ID:</span>{" "}
               <span className="text-gray-600 text-sm">{user?.id}</span>
             </div>
-            <div>
+            <div className="flex items-center gap-2">
+              <HiShieldCheck className="text-xl text-purple-600" />
               <span className="font-semibold text-gray-700">Rol:</span>{" "}
               <span
                 className={`badge ${
@@ -117,53 +132,24 @@ export default function PerfilPage() {
         </div>
 
         <div className="farma-card mb-6">
-          <h2 className="text-xl font-semibold text-green-800 mb-4">
+          <h2 className="text-xl font-semibold text-green-800 mb-4 flex items-center gap-2">
+            <HiLockClosed className="text-2xl" />
             Seguridad
           </h2>
-
-          {success && (
-            <div className="alert alert-success mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 shrink-0 stroke-current"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span>{success}</span>
-            </div>
-          )}
 
           {!showPasswordForm ? (
             <button
               onClick={() => setShowPasswordForm(true)}
-              className="btn farma-btn-primary"
+              className="btn farma-btn-primary flex items-center gap-2"
             >
-              🔒 Cambiar Contraseña
+              <HiLockClosed className="text-lg" />
+              Cambiar Contraseña
             </button>
           ) : (
             <div>
               {error && (
                 <div className="alert alert-error mb-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 shrink-0 stroke-current"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+                  <HiXCircle className="text-2xl" />
                   <span>{error}</span>
                 </div>
               )}
@@ -223,7 +209,7 @@ export default function PerfilPage() {
                 <div className="flex gap-2">
                   <button
                     type="submit"
-                    className="btn farma-btn-primary"
+                    className="btn farma-btn-primary flex items-center gap-2"
                     disabled={loading}
                   >
                     {loading ? (
@@ -232,7 +218,10 @@ export default function PerfilPage() {
                         Actualizando...
                       </>
                     ) : (
-                      "💾 Guardar Cambios"
+                      <>
+                        <HiCheckCircle className="text-lg" />
+                        Guardar Cambios
+                      </>
                     )}
                   </button>
                   <button
@@ -244,8 +233,9 @@ export default function PerfilPage() {
                       setConfirmPassword("");
                       setError("");
                     }}
-                    className="btn btn-outline btn-error"
+                    className="btn btn-outline btn-error flex items-center gap-2"
                   >
+                    <HiXCircle className="text-lg" />
                     Cancelar
                   </button>
                 </div>
@@ -255,8 +245,12 @@ export default function PerfilPage() {
         </div>
 
         <div className="text-center">
-          <Link href="/" className="btn btn-outline btn-success">
-            ← Volver al inicio
+          <Link
+            href="/"
+            className="btn btn-outline btn-success flex items-center gap-2 mx-auto w-fit"
+          >
+            <HiArrowLeft className="text-lg" />
+            Volver al inicio
           </Link>
         </div>
       </div>
