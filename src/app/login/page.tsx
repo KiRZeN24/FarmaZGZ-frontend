@@ -29,7 +29,7 @@ export default function LoginPage() {
       <div className="card w-full max-w-md bg-white shadow-xl">
         <div className="card-body">
           <h2 className="card-title text-3xl font-bold text-center text-green-800 mb-6">
-            🏥 Iniciar Sesión
+            Iniciar Sesión
           </h2>
 
           {error && (
