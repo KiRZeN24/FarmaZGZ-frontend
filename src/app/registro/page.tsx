@@ -25,6 +25,14 @@ export default function RegisterPage() {
       return;
     }
 
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+    if (!passwordRegex.test(password)) {
+      setError(
+        "La contraseña debe contener al menos una mayúscula, una minúscula y un número"
+      );
+      return;
+    }
+
     setLoading(true);
 
     try {
