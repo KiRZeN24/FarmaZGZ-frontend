@@ -41,7 +41,7 @@ export default function RegisterPage() {
       <div className="card w-full max-w-md bg-white shadow-xl">
         <div className="card-body">
           <h2 className="card-title text-3xl font-bold text-center text-green-800 mb-6">
-            🏥 Crear Cuenta
+            Crear Cuenta
           </h2>
 
           {error && (
@@ -64,7 +64,6 @@ export default function RegisterPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Username Input */}
             <div>
               <label className="input validator flex items-center gap-2">
                 <svg
@@ -103,7 +102,6 @@ export default function RegisterPage() {
               </p>
             </div>
 
-            {/* Password Input */}
             <div>
               <label className="input flex items-center gap-2">
                 <svg
@@ -142,7 +140,6 @@ export default function RegisterPage() {
               <p className="text-sm text-gray-500 mt-1">Mínimo 8 caracteres</p>
             </div>
 
-            {/* Confirm Password Input */}
             <div>
               <label className="input flex items-center gap-2">
                 <svg
