@@ -12,6 +12,7 @@ import PharmaciesTable from "@/components/admin/PharmaciesTable";
 import UserEditModal from "@/components/admin/UserEditModal";
 import UserCreateModal from "@/components/admin/UserCreateModal";
 import { HiShieldCheck, HiArrowLeft } from "react-icons/hi2";
+import toast from "react-hot-toast";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
@@ -83,13 +84,13 @@ export default function AdminDashboard() {
       });
 
       if (response.ok) {
-        alert("✅ Farmacias sincronizadas correctamente");
+        toast.success("Farmacias sincronizadas correctamente");
         fetchDashboardData();
       } else {
         throw new Error("Error al sincronizar");
       }
     } catch (error) {
-      alert("❌ Error al sincronizar farmacias");
+      toast.error("Error al sincronizar farmacias");
     } finally {
       setSyncing(false);
     }
@@ -109,7 +110,7 @@ export default function AdminDashboard() {
       setShowPharmacies(true);
     } catch (error) {
       console.error("Error fetching pharmacies:", error);
-      alert("❌ Error al cargar farmacias");
+      toast.error("Error al cargar farmacias");
     } finally {
       setLoadingPharmacies(false);
     }
@@ -150,7 +151,7 @@ export default function AdminDashboard() {
       );
 
       if (response.ok) {
-        alert("✅ Usuario actualizado correctamente");
+        toast.success("Usuario actualizado correctamente");
         setEditingUser(null);
         setEditUsername("");
         setEditRole("USER");
@@ -160,7 +161,7 @@ export default function AdminDashboard() {
         throw new Error("Error al actualizar usuario");
       }
     } catch (error) {
-      alert("❌ Error al actualizar usuario");
+      toast.error("Error al actualizar usuario");
     }
   };
 
@@ -183,7 +184,7 @@ export default function AdminDashboard() {
       });
 
       if (response.ok) {
-        alert("✅ Usuario creado correctamente");
+        toast.success("Usuario creado correctamente");
         setShowCreateModal(false);
         setNewUsername("");
         setNewPassword("");
@@ -191,10 +192,10 @@ export default function AdminDashboard() {
         fetchDashboardData();
       } else {
         const error = await response.json();
-        alert(`❌ Error: ${error.message || "No se pudo crear el usuario"}`);
+        toast.error(error.message || "No se pudo crear el usuario");
       }
     } catch (error) {
-      alert("❌ Error al crear usuario");
+      toast.error("Error al crear usuario");
     }
   };
 
@@ -211,13 +212,13 @@ export default function AdminDashboard() {
       });
 
       if (response.ok) {
-        alert("✅ Usuario eliminado correctamente");
+        toast.success("Usuario eliminado correctamente");
         fetchDashboardData();
       } else {
         throw new Error("Error al eliminar usuario");
       }
     } catch (error) {
-      alert("❌ Error al eliminar usuario");
+      toast.error("Error al eliminar usuario");
     }
   };
 
