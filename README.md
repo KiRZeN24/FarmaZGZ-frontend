@@ -35,7 +35,7 @@ Aplicación web para consultar las farmacias de guardia en Zaragoza. Desarrollad
 
 1. **Clonar el repositorio:**
 
-git clone https://github.com/tu-usuario/farmazgz-frontend.git
+git clone https://github.com/KiRZeN24/FarmaZGZ-frontend.git
 cd farmazgz-frontend
 
 2. **Instalar dependencias:**
