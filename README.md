@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FarmaZGZ - Frontend
 
-## Getting Started
+Aplicación web para consultar las farmacias de guardia en Zaragoza. Desarrollada con Next.js 15, TypeScript y Tailwind CSS.
 
-First, run the development server:
+[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0-38bdf8)](https://tailwindcss.com/)
 
-```bash
+## ✨ Características
+
+- 🔍 **Búsqueda de farmacias de guardia** del día actual
+- 📍 **Geolocalización** e integración con Google Maps
+- ✅ **Sistema de validaciones** comunitario
+- 👤 **Autenticación** con JWT
+- 🎨 **Diseño responsive** con DaisyUI
+- 🔔 **Notificaciones** con react-hot-toast
+- 🛡️ **Panel de administración** para gestión de usuarios y farmacias
+
+## 🚀 Tecnologías
+
+- **Framework:** Next.js 15 (App Router)
+- **Lenguaje:** TypeScript
+- **Estilos:** Tailwind CSS + DaisyUI
+- **Iconos:** React Icons
+- **Mapas:** Leaflet + React-Leaflet
+- **Notificaciones:** React Hot Toast
+
+## 📋 Requisitos previos
+
+- Node.js 18.x o superior
+- npm o yarn
+- Backend de FarmaZGZ corriendo en `http://localhost:3001`
+
+## 🛠️ Instalación
+
+1. **Clonar el repositorio:**
+
+git clone https://github.com/tu-usuario/farmazgz-frontend.git
+cd farmazgz-frontend
+
+2. **Instalar dependencias:**
+
+npm install
+
+3. **Configurar variables de entorno:**
+
+Crea un archivo `.env.local` en la raíz:
+
+NEXT_PUBLIC_API_URL=http://localhost:3001
+
+4. **Ejecutar en desarrollo:**
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+La aplicación estará disponible en `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔐 Autenticación
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+La aplicación utiliza JWT (JSON Web Tokens) para la autenticación:
 
-## Learn More
+1. El usuario se registra o inicia sesión
+2. El backend devuelve un `access_token`
+3. El token se guarda en `localStorage`
+4. Se incluye en el header `Authorization: Bearer {token}` en cada petición
 
-To learn more about Next.js, take a look at the following resources:
+## 👥 Roles de usuario
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **USER:** Puede ver farmacias y validarlas
+- **ADMIN:** Acceso al panel de administración + permisos de USER
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🗺️ Funcionalidades principales
 
-## Deploy on Vercel
+### Página principal
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Lista de farmacias de guardia del día actual
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Detalle de farmacia
+
+- Información completa (nombre, dirección, teléfono, horario)
+- Mapa interactivo con ubicación
+- Sistema de validaciones (correcto/incorrecto)
+- Historial de validaciones
+
+### Panel de administración
+
+- Estadísticas generales
+- Gestión de usuarios (crear, editar, eliminar)
+- Sincronización manual con API del Ayuntamiento
+- Visualización de todas las farmacias
+
+### Perfil de usuario
+
+- Ver información del usuario
+- Cambiar contraseña
+
+### API Endpoints utilizados
+
+// Autenticación
+POST /auth/signin # Iniciar sesión
+POST /auth/signup # Registrarse
+GET /auth/profile # Obtener perfil
+PUT /auth/profile # Actualizar perfil
+
+// Farmacias
+GET /pharmacies/today # Farmacias de hoy
+GET /pharmacies/:id # Detalle de farmacia
+GET /pharmacies/:id/validations # Validaciones de una farmacia
+POST /pharmacies/sync # Sincronizar (admin)
+
+// Validaciones
+POST /validations # Crear validación
+GET /validations/my-validations # Mis validaciones
+
+// Usuarios (admin)
+GET /users # Listar usuarios
+POST /users # Crear usuario
+PUT /users/:id # Actualizar usuario
+DELETE /users/:id # Eliminar usuario
