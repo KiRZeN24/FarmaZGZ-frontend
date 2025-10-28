@@ -96,23 +96,37 @@ La aplicación utiliza JWT (JSON Web Tokens) para la autenticación:
 ### API Endpoints utilizados
 
 // Autenticación
+
 POST /auth/signin # Iniciar sesión
+
 POST /auth/signup # Registrarse
+
 GET /auth/profile # Obtener perfil
+
 PUT /auth/profile # Actualizar perfil
 
 // Farmacias
+
 GET /pharmacies/today # Farmacias de hoy
+
 GET /pharmacies/:id # Detalle de farmacia
+
 GET /pharmacies/:id/validations # Validaciones de una farmacia
+
 POST /pharmacies/sync # Sincronizar (admin)
 
 // Validaciones
+
 POST /validations # Crear validación
+
 GET /validations/my-validations # Mis validaciones
 
 // Usuarios (admin)
+
 GET /users # Listar usuarios
+
 POST /users # Crear usuario
+
 PUT /users/:id # Actualizar usuario
+
 DELETE /users/:id # Eliminar usuario
