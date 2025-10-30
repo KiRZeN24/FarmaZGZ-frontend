@@ -30,12 +30,14 @@ Aplicación web para consultar las farmacias de guardia en Zaragoza. Desarrollad
 - Node.js 18.x o superior
 - npm o yarn
 - Backend de FarmaZGZ corriendo en `http://localhost:3001`
+- Repositorio del Backend: https://github.com/KiRZeN24/FarmaZGZ
 
 ## 🛠️ Instalación
 
 1. **Clonar el repositorio:**
 
 git clone https://github.com/KiRZeN24/FarmaZGZ-frontend.git
+
 cd farmazgz-frontend
 
 2. **Instalar dependencias:**
