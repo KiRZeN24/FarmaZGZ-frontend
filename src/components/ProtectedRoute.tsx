@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import LoadingSpinner from "./LoadingSpinner";
+import { HiShieldExclamation } from "react-icons/hi2";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -38,7 +39,8 @@ export default function ProtectedRoute({
     return (
       <div className="container mx-auto p-4 text-center">
         <div className="alert alert-error max-w-md mx-auto">
-          <span>⛔ No tienes permisos para acceder a esta página</span>
+          <HiShieldExclamation className="text-2xl" />
+          <span>No tienes permisos para acceder a esta página</span>
         </div>
       </div>
     );
